@@ -1,0 +1,425 @@
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Bitcoin, TrendingUp, Wallet, ArrowUpRight, DollarSign, AlertTriangle } from "lucide-react"
+
+export default function BitcoinDashboard() {
+  const [currentStep, setCurrentStep] = useState<"dashboard" | "withdrawal" | "code" | "amount" | "bank" | "error">(
+    "dashboard",
+  )
+  const [withdrawalCode, setWithdrawalCode] = useState("")
+  const [withdrawalAmount, setWithdrawalAmount] = useState("")
+  const [bankDetails, setBankDetails] = useState({
+    bankName: "",
+    accountNumber: "",
+    iban: "",
+    accountHolder: "",
+  })
+
+  const handleWithdrawal = () => {
+    setCurrentStep("code")
+  }
+
+  const handleCodeSubmit = () => {
+    if (
+      withdrawalCode === "5544" ||
+      withdrawalCode === "4455" ||
+      withdrawalCode === "1020" ||
+      withdrawalCode === "7788" ||
+      withdrawalCode === "9900" ||
+      withdrawalCode === "3366" ||
+      withdrawalCode === "2211" ||
+      withdrawalCode === "8844"
+    ) {
+      setCurrentStep("amount")
+    } else {
+      alert("Código inválido. Tente novamente.")
+      setWithdrawalCode("")
+    }
+  }
+
+  const handleAmountSubmit = () => {
+    setCurrentStep("bank")
+  }
+
+  const handleBankSubmit = () => {
+    setCurrentStep("error")
+  }
+
+  const getFeeAmount = () => {
+    if (withdrawalCode === "5544") return "£200"
+    if (withdrawalCode === "4455") return "€700"
+    if (withdrawalCode === "1020") return "€500"
+    if (withdrawalCode === "7788") return "€300"
+    if (withdrawalCode === "9900") return "€150"
+    if (withdrawalCode === "3366") return "€800"
+    if (withdrawalCode === "2211") return "€400"
+    if (withdrawalCode === "8844") return "€250"
+    return "€700"
+  }
+
+  const getFeeMessage = () => {
+    if (withdrawalCode === "1020") {
+      return "É necessário pagar uma taxa de limite de €500. Já tratei do resto."
+    }
+    if (withdrawalCode === "7788") {
+      return "É necessário pagar uma taxa de limite de €300. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "9900") {
+      return "É necessário pagar uma taxa de limite de €150. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "3366") {
+      return "É necessário pagar uma taxa de limite de €800. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "2211") {
+      return "É necessário pagar uma taxa de limite de €400. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "8844") {
+      return "É necessário pagar uma taxa de limite de €250. O agente já tratou do resto."
+    }
+    return `É necessário pagar uma taxa de limite de ${getFeeAmount()} para processar este levantamento.`
+  }
+
+  if (currentStep === "code") {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
+              <Wallet className="h-6 w-6 text-primary" />
+              Verificação de Segurança
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">Insira o código do Investor Alisha para prosseguir</p>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="code">Código de Verificação</Label>
+                  <Input
+                    id="code"
+                    type="password"
+                    value={withdrawalCode}
+                    onChange={(e) => setWithdrawalCode(e.target.value)}
+                    placeholder="Digite o código"
+                    className="text-center text-lg"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setCurrentStep("dashboard")} className="flex-1">
+                    Cancelar
+                  </Button>
+                  <Button onClick={handleCodeSubmit} className="flex-1" disabled={!withdrawalCode}>
+                    Verificar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (currentStep === "amount") {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
+              <DollarSign className="h-6 w-6 text-primary" />
+              Valor do Levantamento
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">Insira o valor que deseja levantar</p>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="amount">Valor (€)</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    value={withdrawalAmount}
+                    onChange={(e) => setWithdrawalAmount(e.target.value)}
+                    placeholder="0.00"
+                    className="text-center text-lg"
+                  />
+                </div>
+                <div className="text-sm text-muted-foreground">Saldo disponível: €50,000.00</div>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setCurrentStep("code")} className="flex-1">
+                    Voltar
+                  </Button>
+                  <Button onClick={handleAmountSubmit} className="flex-1" disabled={!withdrawalAmount}>
+                    Aceitar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (currentStep === "bank") {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
+              <Wallet className="h-6 w-6 text-primary" />
+              Detalhes Bancários
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="bankName">Nome do Banco</Label>
+                <Input
+                  id="bankName"
+                  value={bankDetails.bankName}
+                  onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
+                  placeholder="Ex: Banco Santander Portugal"
+                />
+              </div>
+              <div>
+                <Label htmlFor="accountHolder">Titular da Conta</Label>
+                <Input
+                  id="accountHolder"
+                  value={bankDetails.accountHolder}
+                  onChange={(e) => setBankDetails({ ...bankDetails, accountHolder: e.target.value })}
+                  placeholder="Nome completo"
+                />
+              </div>
+              <div>
+                <Label htmlFor="iban">IBAN</Label>
+                <Input
+                  id="iban"
+                  value={bankDetails.iban}
+                  onChange={(e) => setBankDetails({ ...bankDetails, iban: e.target.value })}
+                  placeholder="PT50 0000 0000 0000 0000 0000 0"
+                />
+              </div>
+              <div>
+                <Label htmlFor="accountNumber">Número da Conta</Label>
+                <Input
+                  id="accountNumber"
+                  value={bankDetails.accountNumber}
+                  onChange={(e) => setBankDetails({ ...bankDetails, accountNumber: e.target.value })}
+                  placeholder="Número da conta"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setCurrentStep("amount")} className="flex-1">
+                  Voltar
+                </Button>
+                <Button
+                  onClick={handleBankSubmit}
+                  className="flex-1"
+                  disabled={!bankDetails.bankName || !bankDetails.iban || !bankDetails.accountHolder}
+                >
+                  Levantar
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (currentStep === "error") {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2 text-destructive">
+              <AlertTriangle className="h-6 w-6" />
+              Taxa de Limite
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert className="border-destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Erro:</strong> {getFeeMessage()}
+              </AlertDescription>
+            </Alert>
+            <div className="text-center space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Esta taxa é obrigatória para levantamentos acima de €1,000
+              </p>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setCurrentStep("dashboard")} className="flex-1">
+                  Voltar ao Dashboard
+                </Button>
+                <Button variant="destructive" className="flex-1">
+                  Pagar Taxa
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen p-4 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-primary rounded-lg">
+            <Bitcoin className="h-8 w-8 text-primary-foreground" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold">Dashboard Bitcoin</h1>
+            <p className="text-muted-foreground">Investor Alisha</p>
+          </div>
+        </div>
+        <Badge variant="secondary" className="text-sm">
+          Online
+        </Badge>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Lucro Total</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">€50,000.00</div>
+            <p className="text-xs text-muted-foreground">+12.5% desde o último mês</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Preço Bitcoin</CardTitle>
+            <Bitcoin className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">€42,350.00</div>
+            <p className="text-xs text-green-600 flex items-center">
+              <ArrowUpRight className="h-3 w-3 mr-1" />
+              +2.4% (24h)
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Carteira</CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1.18 BTC</div>
+            <p className="text-xs text-muted-foreground">Valor: €49,973.00</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Portfolio Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Visão Geral do Portfólio</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bitcoin className="h-5 w-5 text-orange-500" />
+              <span className="font-medium">Bitcoin (BTC)</span>
+            </div>
+            <div className="text-right">
+              <div className="font-bold">1.18 BTC</div>
+              <div className="text-sm text-muted-foreground">€49,973.00</div>
+            </div>
+          </div>
+          <Separator />
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-muted-foreground">Investimento Inicial:</span>
+              <div className="font-medium">€42,500.00</div>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Lucro/Prejuízo:</span>
+              <div className="font-medium text-green-600">+€7,473.00</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Transactions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Transações Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <ArrowUpRight className="h-4 w-4 text-green-600" />
+                </div>
+                <div>
+                  <div className="font-medium">Compra BTC</div>
+                  <div className="text-sm text-muted-foreground">Hoje, 14:30</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-medium">+0.05 BTC</div>
+                <div className="text-sm text-muted-foreground">€2,117.50</div>
+              </div>
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <TrendingUp className="h-4 w-4 text-blue-600" />
+                </div>
+                <div>
+                  <div className="font-medium">Lucro Realizado</div>
+                  <div className="text-sm text-muted-foreground">Ontem, 09:15</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-medium text-green-600">+€1,250.00</div>
+                <div className="text-sm text-muted-foreground">Venda parcial</div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Withdrawal Button */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Ações Rápidas</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button onClick={handleWithdrawal} className="h-12">
+              <Wallet className="h-4 w-4 mr-2" />
+              Levantar Fundos
+            </Button>
+            <Button variant="outline" className="h-12 bg-transparent">
+              <Bitcoin className="h-4 w-4 mr-2" />
+              Comprar Bitcoin
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
