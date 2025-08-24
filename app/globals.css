@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match design brief */
+  /* Updated color tokens to match mining dashboard design brief */
   --background: #ffffff;
-  --foreground: #1f2937;
-  --card: #f8fafc;
-  --card-foreground: #1f2937;
+  --foreground: #475569;
+  --card: #f1f5f9;
+  --card-foreground: #475569;
   --popover: #ffffff;
-  --popover-foreground: #1f2937;
-  --primary: #374151;
+  --popover-foreground: #475569;
+  --primary: #059669;
   --primary-foreground: #ffffff;
-  --secondary: #6366f1;
+  --secondary: #10b981;
   --secondary-foreground: #ffffff;
-  --muted: #f8fafc;
-  --muted-foreground: #1f2937;
-  --accent: #6366f1;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #10b981;
   --accent-foreground: #ffffff;
-  --destructive: #dc2626;
+  --destructive: #be123c;
   --destructive-foreground: #ffffff;
-  --border: #e5e7eb;
-  --input: #f8fafc;
-  --ring: #6366f1;
-  --chart-1: #6366f1;
-  --chart-2: #dc2626;
-  --chart-3: #374151;
-  --chart-4: #1f2937;
-  --chart-5: #f97316;
+  --border: #d1d5db;
+  --input: #f1f5f9;
+  --ring: rgba(5, 150, 105, 0.5);
+  --chart-1: #059669;
+  --chart-2: #10b981;
+  --chart-3: #d97706;
+  --chart-4: #be123c;
+  --chart-5: #374151;
   --radius: 0.5rem;
-  --sidebar: #f8fafc;
-  --sidebar-foreground: #1f2937;
-  --sidebar-primary: #374151;
+  --sidebar: #f1f5f9;
+  --sidebar-foreground: #475569;
+  --sidebar-primary: #059669;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #6366f1;
+  --sidebar-accent: #10b981;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #6366f1;
+  --sidebar-border: #d1d5db;
+  --sidebar-ring: rgba(5, 150, 105, 0.5);
 }
 
 .dark {
@@ -47,32 +47,32 @@
   --card-foreground: #f1f5f9;
   --popover: #1e293b;
   --popover-foreground: #f1f5f9;
-  --primary: #0ea5e9;
+  --primary: #10b981;
   --primary-foreground: #0f172a;
-  --secondary: #a855f7;
+  --secondary: #059669;
   --secondary-foreground: #f1f5f9;
   --muted: #334155;
   --muted-foreground: #94a3b8;
-  --accent: #a855f7;
+  --accent: #10b981;
   --accent-foreground: #f1f5f9;
   --destructive: #f97316;
   --destructive-foreground: #f1f5f9;
   --border: #475569;
   --input: #334155;
-  --ring: rgba(14, 165, 233, 0.5);
-  --chart-1: #a855f7;
-  --chart-2: #f97316;
-  --chart-3: #0ea5e9;
-  --chart-4: #94a3b8;
-  --chart-5: #ea580c;
+  --ring: rgba(16, 185, 129, 0.5);
+  --chart-1: #10b981;
+  --chart-2: #059669;
+  --chart-3: #d97706;
+  --chart-4: #f97316;
+  --chart-5: #94a3b8;
   --sidebar: #1e293b;
   --sidebar-foreground: #f1f5f9;
-  --sidebar-primary: #0ea5e9;
+  --sidebar-primary: #10b981;
   --sidebar-primary-foreground: #f1f5f9;
-  --sidebar-accent: #a855f7;
+  --sidebar-accent: #059669;
   --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #475569;
-  --sidebar-ring: rgba(14, 165, 233, 0.5);
+  --sidebar-ring: rgba(16, 185, 129, 0.5);
 }
 
 @theme inline {
@@ -123,7 +123,7 @@
   }
 }
 
-/* Added custom animations for smooth transitions */
+/* Enhanced animations for mining dashboard */
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -144,10 +144,68 @@
   }
 }
 
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .animate-slide-in-up {
   animation: slideInUp 0.3s ease-out;
 }
 
 .animate-fade-in {
   animation: fadeIn 0.2s ease-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+/* Mining-specific status indicators */
+.status-active {
+  @apply bg-primary text-primary-foreground;
+}
+
+.status-warning {
+  @apply bg-amber-500 text-white;
+}
+
+.status-error {
+  @apply bg-destructive text-destructive-foreground;
+}
+
+.status-offline {
+  @apply bg-gray-500 text-white;
 }

