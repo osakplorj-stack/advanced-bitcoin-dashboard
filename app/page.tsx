@@ -8,12 +8,29 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Bitcoin, TrendingUp, Wallet, ArrowUpRight, DollarSign, AlertTriangle } from "lucide-react"
+import {
+  Bitcoin,
+  TrendingUp,
+  Wallet,
+  ArrowUpRight,
+  DollarSign,
+  AlertTriangle,
+  Star,
+  User,
+  CreditCard,
+} from "lucide-react"
 
 export default function BitcoinDashboard() {
-  const [currentStep, setCurrentStep] = useState<"dashboard" | "withdrawal" | "code" | "amount" | "bank" | "error">(
-    "dashboard",
-  )
+  const [currentStep, setCurrentStep] = useState<
+    "dashboard" | "withdrawal" | "plans" | "userInfo" | "balance" | "code" | "amount" | "bank" | "error"
+  >("dashboard")
+  const [selectedPlan, setSelectedPlan] = useState<string>("")
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+  })
   const [withdrawalCode, setWithdrawalCode] = useState("")
   const [withdrawalAmount, setWithdrawalAmount] = useState("")
   const [bankDetails, setBankDetails] = useState({
@@ -24,7 +41,20 @@ export default function BitcoinDashboard() {
   })
 
   const handleWithdrawal = () => {
-    setCurrentStep("code")
+    setCurrentStep("plans")
+  }
+
+  const handlePlanSelect = (plan: string) => {
+    setSelectedPlan(plan)
+    setCurrentStep("userInfo")
+  }
+
+  const handleUserInfoSubmit = () => {
+    setCurrentStep("balance")
+  }
+
+  const handleAddFunds = () => {
+    alert("Os seus detalhes foram enviados para o seu agente. Compra para começar a ganhar!")
   }
 
   const handleCodeSubmit = () => {
@@ -87,9 +117,220 @@ export default function BitcoinDashboard() {
     return `É necessário pagar uma taxa de limite de ${getFeeAmount()} para processar este levantamento.`
   }
 
+  if (currentStep === "plans") {
+    const plans = [
+      { amount: "€100", returns: "€1,500", roi: "1400%", duration: "30 dias" },
+      { amount: "€200", returns: "€2,800", roi: "1300%", duration: "45 dias" },
+      { amount: "€300", returns: "€3,850", roi: "1183%", duration: "60 dias" },
+      { amount: "€500", returns: "€5,600", roi: "1020%", duration: "90 dias" },
+      { amount: "€600", returns: "€10,700", roi: "1683%", duration: "120 dias" },
+    ]
+
+    return (
+      <div className="min-h-screen p-4 animate-slide-in-up">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold">Planos de Investimento</h1>
+            <p className="text-muted-foreground">Escolha o plano que melhor se adequa aos seus objetivos</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {plans.map((plan, index) => (
+              <Card
+                key={index}
+                className="relative hover:shadow-lg transition-all duration-300 cursor-pointer border-2 hover:border-primary"
+                onClick={() => handlePlanSelect(plan.amount)}
+              >
+                {index === 2 && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-secondary text-secondary-foreground">
+                      <Star className="h-3 w-3 mr-1" />
+                      Popular
+                    </Badge>
+                  </div>
+                )}
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl text-primary">{plan.amount}</CardTitle>
+                  <p className="text-muted-foreground">Investimento Inicial</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600">{plan.returns}</div>
+                    <p className="text-sm text-muted-foreground">Retorno Esperado</p>
+                  </div>
+                  <Separator />
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm">ROI:</span>
+                      <span className="text-sm font-medium text-green-600">{plan.roi}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Duração:</span>
+                      <span className="text-sm font-medium">{plan.duration}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Risco:</span>
+                      <span className="text-sm font-medium text-yellow-600">Moderado</span>
+                    </div>
+                  </div>
+                  <Button className="w-full" variant={index === 2 ? "default" : "outline"}>
+                    Selecionar Plano
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Button variant="outline" onClick={() => setCurrentStep("dashboard")}>
+              Voltar ao Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (currentStep === "userInfo") {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 animate-slide-in-up">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle className="flex items-center justify-center gap-2">
+              <User className="h-6 w-6 text-primary" />
+              Informações Pessoais
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Plano selecionado: <span className="font-medium text-primary">{selectedPlan}</span>
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="name">Nome Completo</Label>
+                <Input
+                  id="name"
+                  value={userInfo.name}
+                  onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+                  placeholder="Seu nome completo"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={userInfo.email}
+                  onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
+                  placeholder="seu@email.com"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phone">Telefone</Label>
+                <Input
+                  id="phone"
+                  value={userInfo.phone}
+                  onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
+                  placeholder="+351 xxx xxx xxx"
+                />
+              </div>
+              <div>
+                <Label htmlFor="address">Morada</Label>
+                <Input
+                  id="address"
+                  value={userInfo.address}
+                  onChange={(e) => setUserInfo({ ...userInfo, address: e.target.value })}
+                  placeholder="Sua morada completa"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setCurrentStep("plans")} className="flex-1">
+                  Voltar
+                </Button>
+                <Button
+                  onClick={handleUserInfoSubmit}
+                  className="flex-1"
+                  disabled={!userInfo.name || !userInfo.email || !userInfo.phone}
+                >
+                  Continuar
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (currentStep === "balance") {
+    return (
+      <div className="min-h-screen p-4 animate-slide-in-up">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold">Sua Carteira</h1>
+            <p className="text-muted-foreground">Bem-vindo à plataforma de investimento Bitcoin</p>
+          </div>
+
+          {/* Balance Card */}
+          <Card className="text-center">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-center gap-2">
+                <Wallet className="h-6 w-6 text-primary" />
+                Saldo Atual
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="text-4xl font-bold text-muted-foreground">€0.00</div>
+              <p className="text-sm text-muted-foreground">Você ainda não participou em nenhum investimento</p>
+              <Badge variant="outline" className="text-xs">
+                Conta Inativa
+              </Badge>
+            </CardContent>
+          </Card>
+
+          {/* Selected Plan Info */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Plano Selecionado</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span>Investimento:</span>
+                <span className="font-bold text-primary">{selectedPlan}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>Status:</span>
+                <Badge variant="outline" className="text-yellow-600">
+                  Aguardando Ativação
+                </Badge>
+              </div>
+              <Separator />
+              <div className="text-sm text-muted-foreground space-y-2">
+                <p>• Informações pessoais registadas</p>
+                <p>• Aguardando confirmação do agente</p>
+                <p>• Adicione fundos para começar a ganhar</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Action Buttons */}
+          <div className="space-y-4">
+            <Button onClick={handleAddFunds} className="w-full h-12 text-lg">
+              <CreditCard className="h-5 w-5 mr-2" />
+              Adicionar Fundos para Começar a Ganhar
+            </Button>
+            <Button variant="outline" onClick={() => setCurrentStep("dashboard")} className="w-full">
+              Voltar ao Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (currentStep === "code") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
@@ -130,7 +371,7 @@ export default function BitcoinDashboard() {
 
   if (currentStep === "amount") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
@@ -172,7 +413,7 @@ export default function BitcoinDashboard() {
 
   if (currentStep === "bank") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
@@ -239,7 +480,7 @@ export default function BitcoinDashboard() {
 
   if (currentStep === "error") {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 animate-fade-in">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2 text-destructive">
@@ -274,7 +515,7 @@ export default function BitcoinDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-4 space-y-6">
+    <div className="min-h-screen p-4 space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -293,7 +534,7 @@ export default function BitcoinDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Lucro Total</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -304,7 +545,7 @@ export default function BitcoinDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Preço Bitcoin</CardTitle>
             <Bitcoin className="h-4 w-4 text-muted-foreground" />
@@ -318,7 +559,7 @@ export default function BitcoinDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Carteira</CardTitle>
             <Wallet className="h-4 w-4 text-muted-foreground" />
@@ -409,11 +650,11 @@ export default function BitcoinDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button onClick={handleWithdrawal} className="h-12">
+            <Button onClick={handleWithdrawal} className="h-12 hover:scale-105 transition-transform">
               <Wallet className="h-4 w-4 mr-2" />
               Levantar Fundos
             </Button>
-            <Button variant="outline" className="h-12 bg-transparent">
+            <Button variant="outline" className="h-12 bg-transparent hover:scale-105 transition-transform">
               <Bitcoin className="h-4 w-4 mr-2" />
               Comprar Bitcoin
             </Button>

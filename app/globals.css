@@ -4,39 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Updated color tokens to match design brief */
   --background: #ffffff;
-  --foreground: #164e63;
-  --card: #ecfeff;
-  --card-foreground: #475569;
+  --foreground: #1f2937;
+  --card: #f8fafc;
+  --card-foreground: #1f2937;
   --popover: #ffffff;
-  --popover-foreground: #475569;
-  --primary: #164e63;
+  --popover-foreground: #1f2937;
+  --primary: #374151;
   --primary-foreground: #ffffff;
-  --secondary: #8b5cf6;
+  --secondary: #6366f1;
   --secondary-foreground: #ffffff;
-  --muted: #f1f5f9;
-  --muted-foreground: #475569;
-  --accent: #8b5cf6;
+  --muted: #f8fafc;
+  --muted-foreground: #1f2937;
+  --accent: #6366f1;
   --accent-foreground: #ffffff;
-  --destructive: #ea580c;
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #6b7280;
-  --input: #ffffff;
-  --ring: rgba(22, 78, 99, 0.5);
-  --chart-1: #8b5cf6;
-  --chart-2: #ea580c;
-  --chart-3: #164e63;
-  --chart-4: #475569;
+  --border: #e5e7eb;
+  --input: #f8fafc;
+  --ring: #6366f1;
+  --chart-1: #6366f1;
+  --chart-2: #dc2626;
+  --chart-3: #374151;
+  --chart-4: #1f2937;
   --chart-5: #f97316;
   --radius: 0.5rem;
-  --sidebar: #f1f5f9;
-  --sidebar-foreground: #475569;
-  --sidebar-primary: #164e63;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #1f2937;
+  --sidebar-primary: #374151;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #8b5cf6;
+  --sidebar-accent: #6366f1;
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #6b7280;
-  --sidebar-ring: rgba(22, 78, 99, 0.5);
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #6366f1;
 }
 
 .dark {
@@ -120,4 +121,33 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Added custom animations for smooth transitions */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
 }
